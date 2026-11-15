@@ -189,6 +189,12 @@ a{color:var(--spot)}
     <div class="kicker">Fuentes y notas</div>
     <ul>
       <li>Datos sincronizados directamente desde Google Sheets en tiempo real.</li>
+      <li>VTEX, "El futuro del comercio B2B: tendencias, retos y cómo escalar en 2026", blog de VTEX.</li>
+      <li>Colleen Baum, Molly Squire, Tyler Rose y Joshua Reuben (McKinsey & Company), "Shopping in the age of AI".</li>
+      <li>Sandra Gonzalez Mangana (Adobe Commerce), "Transforming product discovery with AI in Adobe Commerce".</li>
+      <li>accessiBe, "Hyper-personalization: From customer preference to inclusive expectation".</li>
+      <li>Voyado, "Inside e-commerce".</li>
+      <li>SAP Blog de Innovación, "Reinventando el Retail: La Era de la Hiperpersonalización con SAP CRM y CX".</li>
     </ul>
   </footer>
 </div>
@@ -312,7 +318,6 @@ async function iniciar() {
             if (!lineas[i].trim()) continue;
             const cols = lineas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ''));
             
-            // Filtro de seguridad para ignorar filas de etiquetas o encabezados que hayan quedado en el Sheet
             const descLower = (cols[0] || "").toLowerCase();
             if (descLower.includes("horizonte") || descLower.includes("brecha") || descLower.includes("fuente") || descLower.includes("descripción")) {
                 continue;
