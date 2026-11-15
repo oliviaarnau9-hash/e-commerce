@@ -11,21 +11,23 @@ st.set_page_config(
 st.title("🚀 Radar de Hiper-personalización en E-commerce")
 st.markdown("Dashboard dinámico conectado en tiempo real a Google Sheets.")
 
-# Conexión directa a tu Google Sheets público en formato CSV
+# --- CONEXIÓN DIRECTA A GOOGLE SHEETS (Método público optimizado) ---
 @st.cache_data(ttl=60)
 def load_data():
-    sheet_url = "https://docs.google.com/spreadsheets/d/14j0gnuRFLhfrtfi4jqOkEeau2JSYG5_kXMgqLLK0M5Y/export?format=csv&gid=0"
+    # Usamos el formato de exportación web estándar de Google Sheets
+    sheet_id = "14j0gnuRFLhfrtfi4jqOkEeau2JSYG5_kXMgqLLK0M5Y"
+    sheet_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv"
     df = pd.read_csv(sheet_url)
     return df
 
 try:
     df = load_data()
-
+    
     # Métricas superiores
     col1, col2, col3 = st.columns(3)
     total_tendencias = len(df)
-    corto_plazo = len(df[df['Horizonte_Temporal'].str.contains("Corto", case=False, na=False)])
-
+    corto_plazo = len(df[df['Horizonte_Temporal'].str.contains("Corto", case=False, na=False)]) if 'Horizonte_Temporal' in df.columns else 0
+    
     col1.metric("Tendencias Totales", total_tendencias)
     col2.metric("Horizonte Corto (0-1 año)", corto_plazo)
     col3.metric("Fuentes Analizadas", "Varios reportes")
