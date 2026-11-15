@@ -9,15 +9,14 @@ st.set_page_config(
 )
 
 st.title("🚀 Radar de Hiper-personalización en E-commerce")
-st.markdown("Dashboard dinámico conectado en tiempo real a Google Sheets.")
+st.markdown("Dashboard dinámico interactivo.")
 
-# --- CONEXIÓN DIRECTA A GOOGLE SHEETS (Método público optimizado) ---
-@st.cache_data(ttl=60)
+# --- CARGA DEL ARCHIVO LOCAL ---
+@st.cache_data
 def load_data():
-    # Usamos el formato de exportación web estándar de Google Sheets
-    sheet_id = "14j0gnuRFLhfrtfi4jqOkEeau2JSYG5_kXMgqLLK0M5Y"
-    sheet_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv"
-    df = pd.read_csv(sheet_url)
+    # Buscamos el archivo CSV subido al repositorio
+    # Reemplaza 'tendencias.csv' con el nombre exacto del archivo que descargues, o sube tu CSV a GitHub
+    df = pd.read_csv("tendencias.csv")
     return df
 
 try:
@@ -46,4 +45,4 @@ try:
     st.dataframe(df, use_container_width=True)
 
 except Exception as e:
-    st.error(f"Error al cargar los datos: {e}")
+    st.warning("Sube un archivo llamado 'tendencias.csv' a tu repositorio de GitHub para ver los datos.")
