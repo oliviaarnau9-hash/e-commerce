@@ -2,47 +2,85 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+# Configuración de página con diseño ancho y limpio
 st.set_page_config(
     page_title="Radar de Hiper-personalización E-commerce",
-    page_icon="🚀",
+    page_icon="⚡",
     layout="wide"
 )
 
-st.title("🚀 Radar de Hiper-personalización en E-commerce")
-st.markdown("Dashboard dinámico interactivo.")
+# Estilos CSS personalizados para darle un toque moderno (tipo app web)
+st.markdown("""
+    <style>
+    .main {
+        background-color: #0e1117;
+    }
+    h1 {
+        color: #ffffff;
+        font-weight: 700;
+    }
+    .metric-card {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# --- CARGA DEL ARCHIVO LOCAL ---
+# Encabezado principal
+st.title("⚡ Radar de Hiper-personalización en E-commerce")
+st.markdown("Panel interactivo de tendencias y análisis estratégico en tiempo real.")
+st.markdown("---")
+
+# --- CARGA DE DATOS ---
 @st.cache_data
 def load_data():
-    # Buscamos el archivo CSV subido al repositorio
-    # Reemplaza 'tendencias.csv' con el nombre exacto del archivo que descargues, o sube tu CSV a GitHub
     df = pd.read_csv("tendencias.csv")
     return df
 
 try:
     df = load_data()
     
-    # Métricas superiores
-    col1, col2, col3 = st.columns(3)
+    # --- MÉTRICAS SUPERIORES (Estilo Tarjetas) ---
+    col1, col2, col3, col4 = st.columns(4)
+    
     total_tendencias = len(df)
     corto_plazo = len(df[df['Horizonte_Temporal'].str.contains("Corto", case=False, na=False)]) if 'Horizonte_Temporal' in df.columns else 0
+    mediano_plazo = len(df[df['Horizonte_Temporal'].str.contains("Mediano", case=False, na=False)]) if 'Horizonte_Temporal' in df.columns else 0
     
-    col1.metric("Tendencias Totales", total_tendencias)
-    col2.metric("Horizonte Corto (0-1 año)", corto_plazo)
-    col3.metric("Fuentes Analizadas", "Varios reportes")
+    col1.metric("📊 Total Tendencias", total_tendencias)
+    col2.metric("🚀 Corto Plazo (0-1 año)", corto_plazo)
+    col3.metric("📈 Mediano Plazo", mediano_plazo)
+    col4.metric("🌐 Estado", "Activo / En vivo")
 
     st.markdown("---")
 
-    # Gráfico de barras interactivo
-    st.subheader("Distribución por Horizonte Temporal")
-    if 'Horizonte_Temporal' in df.columns:
-        fig = px.histogram(df, x="Horizonte_Temporal", color="Horizonte_Temporal", 
-                           title="Tendencias según Horizonte")
-        st.plotly_chart(fig, use_container_width=True)
+    # --- SECCIÓN DE GRÁFICOS Y FILTROS ---
+    col_izq, col_der = st.columns([1, 1])
 
-    # Tabla de datos detallada
-    st.subheader("Base de Datos de Tendencias")
-    st.dataframe(df, use_container_width=True)
+    with col_izq:
+        st.subheader("📌 Distribución por Horizonte")
+        if 'Horizonte_Temporal' in df.columns:
+            fig = px.pie(df, names="Horizonte_Temporal", hole=0.4,
+                           color_discrete_sequence=px.colors.sequential.Tealgrn)
+            fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font_color="white")
+            st.plotly_chart(fig, use_container_width=True)
+
+    with col_der:
+        st.subheader("🔍 Análisis Rápido de Brechas")
+        if 'Brecha_Actual' in df.columns:
+            fig2 = px.bar(df, x="ID_Tendencia", y="Brecha_Actual" if 'Brecha_Actual' in df.columns else None,
+                          color="Horizonte_Temporal", title="Brechas Actuales por Tendencia")
+            fig2.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font_color="white")
+            st.plotly_chart(fig2, use_container_width=True)
+
+    st.markdown("---")
+
+    # --- TABLA DE DATOS ESTILIZADA ---
+    st.subheader("📋 Base de Datos Completa de Tendencias")
+    st.dataframe(df, use_container_width=True, height=400)
 
 except Exception as e:
-    st.warning("Sube un archivo llamado 'tendencias.csv' a tu repositorio de GitHub para ver los datos.")
+    st.error(f"Error al cargar los datos: {e}")
