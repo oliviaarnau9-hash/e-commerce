@@ -9,63 +9,71 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- ESTILOS CSS PERSONALIZADOS (ESTÉTICA VERCEL / DARK MODE) ---
+# --- ESTILOS CSS CLAVADOS AL DISEÑO DE VERCEL ---
 st.markdown("""
     <style>
-    /* Fondo general oscuro */
+    /* Reset y fondo principal tipo Vercel */
     .stApp {
-        background-color: #090d16;
-        color: #f3f4f6;
+        background-color: #000000;
+        color: #ededed;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     
-    /* Ocultar elementos predeterminados de Streamlit para que parezca una app web limpia */
+    /* Ocultar elementos de Streamlit */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
 
-    /* Estilo de Tarjetas KPI / Contenedores */
-    .card-metric {
-        background-color: #111827;
-        border: 1px solid #1f2937;
+    /* Tarjetas estilo Vercel (Borde sutil, fondo gris oscuro plano) */
+    .vercel-card {
+        background-color: #0a0a0a;
+        border: 1px solid #222222;
+        border-radius: 8px;
         padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-        margin-bottom: 15px;
+        margin-bottom: 16px;
+        transition: border-color 0.2s ease;
     }
-    
-    /* Títulos principales */
+    .vercel-card:hover {
+        border-color: #444444;
+    }
+
+    /* Tipografía de títulos */
     h1, h2, h3 {
-        color: #ffffff;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #ffffff !important;
+        font-weight: 600;
+        letter-spacing: -0.025em;
+    }
+
+    /* Tablas prolijas y oscuras */
+    dataframe, .stDataFrame {
+        border: 1px solid #222222;
+        border-radius: 8px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- ENCABEZADO PRINCIPAL ---
+# --- CABECERA LIMPIA ---
 st.markdown("""
-    <div style="padding: 20px 0;">
-        <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 5px;">⚡ Radar de Hiper-personalización en E-commerce</h1>
-        <p style="color: #9ca3af; font-size: 1.1rem;">Plataforma interactiva de monitoreo estratégico y análisis de tendencias en tiempo real.</p>
+    <div style="margin-bottom: 30px;">
+        <h1 style="font-size: 1.8rem; font-weight: 600; margin-bottom: 8px;">⚡ Radar de Hiper-personalización en E-commerce</h1>
+        <p style="color: #888888; font-size: 0.95rem;">Monitoreo estratégico y análisis de tendencias en tiempo real.</p>
     </div>
 """, unsafe_allow_html=True)
-
-st.markdown("---")
 
 # --- CARGA DE DATOS ---
 @st.cache_data
 def load_data():
     df = pd.read_csv("tendencias.csv")
-    df.columns = df.columns.str.strip() # Limpia espacios en las columnas
+    df.columns = df.columns.str.strip()
     return df
 
 try:
     df = load_data()
     
-    # Detección inteligente de columnas según tu planilla
     col_horizonte = next((col for col in df.columns if 'horizonte' in col.lower()), df.columns[0])
     
-    # --- PANEL LATERAL (FILTROS) ---
-    st.sidebar.markdown("### 🎛️ Filtros del Radar")
+    # --- FILTRO LATERAL MINIMALISTA ---
+    st.sidebar.markdown("### Filtros")
     horizontes_disponibles = ["Todos"] + list(df[col_horizonte].dropna().unique())
     filtro_horizonte = st.sidebar.selectbox("Horizonte Temporal", horizontes_disponibles)
     
@@ -74,57 +82,44 @@ try:
     else:
         df_filtrado = df
 
-    # --- TARJETAS DE MÉTRICAS (KPI CARDS - ESTILO VERCEL) ---
-    total_tendencias = len(df_filtrado)
-    corto_plazo = len(df_filtrado[df_filtrado[col_horizonte].astype(str).str.contains("Corto", case=False, na=False)])
+    # --- TARJETAS DE MÉTRICAS (ESTILO UI VERCEL) ---
+    total = len(df_filtrado)
+    corto = len(df_filtrado[df_filtrado[col_horizonte].astype(str).str.contains("Corto", case=False, na=False)])
     
-    c1, c2, c3 = st.columns(3)
+    col1, col2, col3 = st.columns(3)
     
-    with c1:
+    with col1:
         st.markdown(f"""
-            <div class="card-metric">
-                <p style="color: #9ca3af; font-size: 0.9rem; margin: 0;">Total Registros</p>
-                <h3 style="color: #38bdf8; font-size: 1.8rem; margin: 5px 0 0 0;">{total_tendencias}</h3>
+            <div class="vercel-card">
+                <span style="color: #888888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Total Tendencias</span>
+                <div style="font-size: 1.8rem; font-weight: 600; color: #ffffff; margin-top: 6px;">{total}</div>
             </div>
         """, unsafe_allow_html=True)
         
-    with c2:
+    with col2:
         st.markdown(f"""
-            <div class="card-metric">
-                <p style="color: #9ca3af; font-size: 0.9rem; margin: 0;">Corto Plazo (0-1 año)</p>
-                <h3 style="color: #34d399; font-size: 1.8rem; margin: 5px 0 0 0;">{corto_plazo}</h3>
+            <div class="vercel-card">
+                <span style="color: #888888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Corto Plazo</span>
+                <div style="font-size: 1.8rem; font-weight: 600; color: #ffffff; margin-top: 6px;">{corto}</div>
             </div>
         """, unsafe_allow_html=True)
         
-    with c3:
+    with col3:
         st.markdown(f"""
-            <div class="card-metric">
-                <p style="color: #9ca3af; font-size: 0.9rem; margin: 0;">Estado del Sistema</p>
-                <h3 style="color: #c084fc; font-size: 1.8rem; margin: 5px 0 0 0;">Conectado</h3>
+            <div class="vercel-card">
+                <span style="color: #888888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Estado</span>
+                <div style="font-size: 1.8rem; font-weight: 600; color: #34d399; margin-top: 6px;">● Activo</div>
             </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # --- GRÁFICO DINÁMICO ADAPTADO AL MODO OSCURO ---
-    st.subheader("📊 Distribución Visual")
-    if col_horizonte in df.columns:
-        fig = px.histogram(df_filtrado, x=col_horizonte, color=col_horizonte,
-                           color_discrete_sequence=["#38bdf8", "#34d399", "#c084fc", "#f472b6"])
-        fig.update_layout(
-            paper_bgcolor="#111827",
-            plot_bgcolor="#111827",
-            font_color="#f3f4f6",
-            margin=dict(t=20, b=20, l=20, r=20),
-            legend=dict(font=dict(color="#f3f4f6"))
-        )
-        st.plotly_chart(fig, use_container_width=True)
-
-    st.markdown("---")
-
-    # --- TABLA DE DATOS ESTILIZADA ---
-    st.subheader("📋 Base de Datos de Tendencias")
+    # --- SECCIÓN DE DATOS (ESTILO CONTENEDOR VERCEL) ---
+    st.markdown("""
+        <div class="vercel-card" style="margin-top: 20px;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 15px;">Base de Datos de Tendencias</h3>
+        </div>
+    """, unsafe_allow_html=True)
+    
     st.dataframe(df_filtrado, use_container_width=True, height=450)
 
 except Exception as e:
-    st.error(f"Error al procesar la aplicación: {e}")
+    st.error(f"Error al cargar los datos: {e}")
