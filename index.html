@@ -1,362 +1,88 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Radar · Hiper-personalización en e-commerce PyME</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-<style>
-:root{
-  --paper:#f5f3ec; --paper-2:#e9e6da; --ink:#1b1f1c; --ink-2:#5d6259; --rule:#cbc8bb;
-  --spot:#0f7a6a;
-  --s-VTEX:#0e7c86; --s-McKinsey:#3551a8; --s-Adobe:#c8502f; --s-accessiBe:#7a4fb0; --s-Voyado:#a8772a;
-  --h-Corto:#2f8a5b; --h-Mediano:#c0792a; --h-Largo:#6b4fb8; --h-inf:#8a8d86;
-  --g-Alta:#c8502f; --g-Media:#c0912a; --g-NoEsp:#8a8d86;
-  --f-mast:"Bricolage Grotesque","Arial Black",Arial,sans-serif;
-  --f-head:"Fraunces",Georgia,"Times New Roman",serif;
-  --f-ui:"Inter",Arial,sans-serif;
-  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#0e1412; --paper-2:#17201d; --ink:#e6ece8; --ink-2:#9fada5; --rule:#2f3b36;
-  --spot:#5fd3b8; --s-VTEX:#5fc6cf; --s-McKinsey:#8fa6ea; --s-Adobe:#f08a68; --s-accessiBe:#b79be6; --s-Voyado:#e0b36a;
-  --h-Corto:#6fd09b; --h-Mediano:#e7a863; --h-Largo:#b9a2f0; --h-inf:#9aa39e;
-  --g-Alta:#f08a68; --g-Media:#e7b963; --g-NoEsp:#9aa39e; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --paper:#0e1412; --paper-2:#17201d; --ink:#e6ece8; --ink-2:#9fada5; --rule:#2f3b36;
-  --spot:#5fd3b8; --s-VTEX:#5fc6cf; --s-McKinsey:#8fa6ea; --s-Adobe:#f08a68; --s-accessiBe:#b79be6; --s-Voyado:#e0b36a;
-  --h-Corto:#6fd09b; --h-Mediano:#e7a863; --h-Largo:#b9a2f0; --h-inf:#9aa39e;
-  --g-Alta:#f08a68; --g-Media:#e7b963; --g-NoEsp:#9aa39e; color-scheme:dark}
-
-*{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-head);font-size:17px;line-height:1.5}
-.wrap{max-width:1200px;margin:0 auto;padding:18px 16px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.kicker{font-family:var(--f-mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-2)}
-h1,h2,h3{margin:0;text-wrap:balance}
-select,input{font:inherit;font-family:var(--f-ui);font-size:14px;background:var(--paper);color:var(--ink);border:1px solid var(--rule);padding:6px 8px;max-width:100%}
-select:focus-visible,input:focus-visible{outline:2px solid var(--spot);outline-offset:2px}
-
-.mast{display:flex;align-items:center;justify-content:center;gap:clamp(12px,2.4vw,26px);padding:18px 0 10px;flex-wrap:wrap}
-.mast h1{font-family:var(--f-mast);font-weight:800;font-size:clamp(26px,5.4vw,64px);line-height:.95;letter-spacing:-.025em;text-transform:uppercase;text-align:center}
-.mast h1 small{display:block;font-family:var(--f-mono);font-weight:500;font-size:clamp(11px,1.2vw,14px);letter-spacing:.32em;color:var(--spot);margin-bottom:6px}
-.scope{flex:none;width:clamp(54px,8vw,92px);aspect-ratio:1;border-radius:50%;position:relative;border:1.5px solid var(--ink);overflow:hidden;
-  background:radial-gradient(circle,transparent 31%,var(--rule) 32%,transparent 33.5%,transparent 64%,var(--rule) 65%,transparent 66.5%),linear-gradient(var(--rule),var(--rule)) center/1px 100% no-repeat,linear-gradient(90deg,var(--rule),var(--rule)) center/100% 1px no-repeat}
-.scope::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,color-mix(in srgb,var(--spot) 55%,transparent),transparent 70deg);animation:sweep 6s linear infinite}
-@keyframes sweep{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){.scope::before{animation:none;transform:rotate(40deg)}}
-.deck{text-align:center;font-style:italic;color:var(--ink-2);font-size:16px;margin:4px auto 0;max-width:720px}
-.dateline{display:flex;justify-content:space-between;align-items:center;gap:10px 16px;flex-wrap:wrap;border-top:2px solid var(--ink);border-bottom:1px solid var(--ink);padding:8px 0;margin-top:14px;font-family:var(--f-mono);font-size:12.5px;text-transform:uppercase;letter-spacing:.06em}
-.origen{font-family:var(--f-ui);font-size:13px;text-transform:none;letter-spacing:0;color:var(--ink-2)}
-.origen b{color:var(--spot);font-weight:600}
-
-.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding:22px 0;border-bottom:1px solid var(--ink)}
-.kpi{background:var(--paper-2);border-top:3px solid var(--spot);padding:14px 16px}
-.kpi .n{font-family:var(--f-mast);font-weight:700;font-size:clamp(26px,3.6vw,40px);line-height:1;margin-top:8px}
-.kpi .l{font-family:var(--f-ui);font-size:14px;color:var(--ink-2);margin-top:6px}
-@media (max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
-
-.band{padding:26px 0;border-bottom:1px solid var(--rule)}
-.band h2{font-family:var(--f-head);font-size:clamp(22px,3vw,30px);font-weight:700;margin-top:6px}
-.band .sub{font-family:var(--f-ui);color:var(--ink-2);font-size:15px;margin:6px 0 16px}
-
-.row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px;align-items:center;margin:10px 0;font-family:var(--f-ui);font-size:15px}
-.row span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bar{display:flex;height:30px;background:var(--paper-2);border-radius:2px;overflow:hidden}
-.seg{display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--f-mono);font-size:12px;font-weight:500;min-width:0;white-space:nowrap;overflow:hidden}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--f-ui);font-size:14px;color:var(--ink-2);margin-top:10px}
-.legend i{display:inline-block;width:11px;height:11px;margin-right:6px;vertical-align:-1px}
-.sw-Corto{background:var(--h-Corto)} .sw-Mediano{background:var(--h-Mediano)} .sw-Largo{background:var(--h-Largo)} .sw-inferido{background:var(--h-inf)}
-.sw-Alta{background:var(--g-Alta)} .sw-Media{background:var(--g-Media)} .sw-NoEsp{background:var(--g-NoEsp)}
-.seg.Corto{background:var(--h-Corto)} .seg.Mediano{background:var(--h-Mediano)} .seg.Largo{background:var(--h-Largo)} .seg.inferido{background:var(--h-inf)}
-
-.heat{display:grid;grid-template-columns:150px repeat(4,minmax(0,1fr));gap:6px;font-family:var(--f-ui);font-size:14px}
-.heat .hd{font-family:var(--f-mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2);padding:6px 4px}
-.heat .rl{display:flex;align-items:center;font-weight:600;padding:6px 4px}
-.tag{display:inline-block;font-family:var(--f-mono);font-size:11.5px;padding:2px 8px;color:#fff;white-space:nowrap}
-.cell{background:var(--paper-2);padding:10px;min-height:86px;border-left:4px solid var(--c,var(--rule))}
-.cell .big{font-family:var(--f-mast);font-size:26px;font-weight:700;line-height:1}
-.cell ul{margin:8px 0 0;padding-left:16px;color:var(--ink-2);font-size:13.5px;line-height:1.35}
-.cell.empty{opacity:.45}
-@media (max-width:760px){.heat{grid-template-columns:1fr}.heat .hd{display:none}.heat .rl{padding-top:12px}}
-.note{font-family:var(--f-ui);font-size:14.5px;color:var(--ink-2);background:var(--paper-2);padding:12px 14px;border-left:3px solid var(--spot);margin-top:14px}
-
-.filters{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-family:var(--f-ui);font-size:15px;margin:6px 0 14px}
-.filters label{display:flex;gap:8px;align-items:center}
-.filters input{min-width:200px}
-.tbl-wrap{overflow-x:auto;border-top:1px solid var(--ink)}
-table{width:100%;border-collapse:collapse;font-family:var(--f-ui);font-size:15px;min-width:820px}
-th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
-th{font-family:var(--f-mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2);font-weight:500}
-td.desc{font-family:var(--f-head);font-size:16px;line-height:1.4;max-width:340px}
-.src{font-weight:600}
-.empty-msg{padding:16px 0;color:var(--ink-2);font-family:var(--f-ui)}
-.chip{display:inline-block;font-family:var(--f-ui);font-size:12.5px;padding:1px 7px;border:1px solid var(--rule);margin:2px 3px 2px 0;color:var(--ink-2)}
-a{color:var(--spot)}
-
-.stat{display:grid;grid-template-columns:minmax(0,1fr) 150px 70px;gap:12px;align-items:center;margin:12px 0}
-.stat .t{font-family:var(--f-ui);font-size:15px}
-.stat .t small{display:block;color:var(--ink-2);font-size:13px}
-.stat .track{height:14px;background:var(--paper-2);position:relative}
-.stat .fill{height:100%;background:var(--spot)}
-.stat.warn .fill{background:var(--g-Alta)}
-.stat.neutral .fill{background:var(--g-NoEsp)}
-.stat .v{font-family:var(--f-mast);font-size:18px;font-weight:700;text-align:right}
-@media (max-width:620px){.stat{grid-template-columns:1fr}.stat .v{text-align:left}}
-
-.foot{padding-top:22px;font-family:var(--f-ui);font-size:14px;color:var(--ink-2)}
-.foot ul{padding-left:18px;margin:8px 0}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radar de Hiper-personalización E-commerce</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: #ededed;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 40px;
+        }
+        h1 { font-size: 1.8rem; font-weight: 600; margin-bottom: 8px; }
+        p { color: #888888; margin-bottom: 30px; }
+        
+        /* Estilo limpio para la tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #0a0a0a;
+            border: 1px solid #222222;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid #222222;
+            font-size: 0.9rem;
+        }
+        th {
+            background-color: #111111;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        tr:hover { background-color: #141414; }
+    </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header>
-    <div class="mast">
-      <div class="scope" aria-hidden="true"></div>
-      <h1><small>Radar · E-commerce PyME</small>Hiper-personalización</h1>
-    </div>
-    <p class="deck">Qué tendencias de personalización llegan, en qué plazo y cuánto se separan de lo que hoy hacen las PyMEs.</p>
-    <div class="dateline">
-      <span id="fecha">Actualizado: 12 de noviembre de 2026</span>
-      <span class="origen" id="origen">Cargando datos…</span>
-    </div>
-  </header>
+    <h1>⚡ Radar de Hiper-personalización en E-commerce</h1>
+    <p>Monitoreo estratégico conectado en tiempo real con Google Sheets.</p>
 
-  <section class="kpis" aria-label="Indicadores clave">
-    <div class="kpi"><div class="kicker">Tendencias</div><div class="n" id="k-total">–</div><div class="l" id="k-total-l">&nbsp;</div></div>
-    <div class="kpi"><div class="kicker">Horizonte corto</div><div class="n" id="k-corto">–</div><div class="l" id="k-corto-l">0 a 1 año</div></div>
-    <div class="kpi"><div class="kicker">Brecha alta</div><div class="n" id="k-alta">–</div><div class="l">Respecto a la PyME promedio</div></div>
-    <div class="kpi"><div class="kicker">Horizonte largo</div><div class="n" id="k-largo">–</div><div class="l">3 años o más</div></div>
-  </section>
+    <!-- Contenedor donde aparecerá la tabla de datos -->
+    <div id="tabla-tendencias">Cargando datos en vivo desde Google Sheets...</div>
 
-  <section class="band">
-    <div class="kicker">Qué mide este dashboard</div>
-    <h2>Preguntas, métricas y origen de los datos</h2>
-    <p class="sub">Cada pregunta del análisis tiene una métrica concreta, una fuente y un procesamiento que se puede verificar.</p>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Pregunta</th><th>Qué se mide</th><th>De dónde sale</th><th>Cómo se procesa</th></tr></thead>
-        <tbody>
-          <tr><td class="desc">¿Qué está pasando hoy?</td><td>Cifras de adopción actual de personalización e IA en PyMEs y e-commerce.</td><td>Encuestas y reportes: nadIA / UTDT, Google Cloud, Voyado, G2, McKinsey, Ringly.</td><td>Se muestran tal cual las publica cada fuente, con quién la mide. No se promedian entre sí.</td></tr>
-          <tr><td class="desc">¿Qué puede venir?</td><td>Horizonte temporal de cada tendencia: corto (0-1 año), mediano (1-3) o largo (3+).</td><td>Textos de las fuentes. Si no indican plazo, se marca como inferido.</td><td>Por tendencia se toma el horizonte más repetido entre sus fuentes.</td></tr>
-          <tr><td class="desc">¿Dónde están las brechas?</td><td>Distancia entre lo que hace hoy la PyME promedio y lo que exige cada tendencia: alta, media o sin especificar.</td><td>Juicio del equipo, justificado en la observación de cada tendencia.</td><td>Mapa de horizonte contra brecha: cuenta las tendencias de cada celda y las lista.</td></tr>
-          <tr><td class="desc">¿Qué tan firme es cada tendencia?</td><td>Cantidad de fuentes independientes que no son señales de redes o foros.</td><td>Notas que recolecta el agente (data/noticias.json) o las tendencias semilla.</td><td>Con 3 o más fuentes no-señal, la tendencia queda confirmada. Con menos, en observación.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+    <script>
+        // TU ENLACE CSV DE GOOGLE SHEETS
+        const sheetCSVUrl = "https://docs.google.com/spreadsheets/d/10LCH3uyunuLZBI0CAbk-GfTKP7pwHx84hTMev2nL-mE/export?format=csv&gid=0";
 
-  <section class="band">
-    <div class="kicker">¿Qué puede venir?</div>
-    <h2>Horizonte temporal por fuente</h2>
-    <p class="sub">Cantidad de tendencias por fuente principal y horizonte. "Inferido" significa que la fuente no indica el plazo.</p>
-    <div id="barras"></div>
-    <div class="legend">
-      <span><i class="sw-Corto"></i>Corto (0-1 año)</span>
-      <span><i class="sw-Mediano"></i>Mediano (1-3 años)</span>
-      <span><i class="sw-Largo"></i>Largo (3+ años)</span>
-      <span><i class="sw-inferido"></i>Inferido</span>
-    </div>
-  </section>
+        async function cargarGoogleSheet() {
+            try {
+                const response = await fetch(sheetCSVUrl);
+                const data = await response.text();
+                
+                // Procesamos las líneas del CSV
+                const filas = data.split('\n').map(row => {
+                    // Manejo básico de comillas del CSV
+                    return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                });
 
-  <section class="band">
-    <div class="kicker">¿Dónde están las brechas?</div>
-    <h2>Horizonte × brecha frente a la PyME promedio</h2>
-    <p class="sub">Cada tendencia cae en una celda. Las de brecha alta son las que más distancia tienen con lo que hoy hace una PyME.</p>
-    <div class="heat" id="mapa"></div>
-    <div class="note">La brecha es una clasificación propia del equipo, no un dato medido. No existe un benchmark que compare PyMEs con el promedio de e-commerce.</div>
-  </section>
+                let html = '<table>';
+                filas.forEach((fila, index) => {
+                    if (fila.length > 1 && fila[0].trim() !== "") {
+                        html += '<tr>';
+                        fila.forEach(celda => {
+                            // Limpiamos comillas extra de las celdas
+                            let valorLimpio = celda.replace(/^"|"$/g, '').trim();
+                            const tipoTag = index === 0 ? 'th' : 'td';
+                            html += `<${tipoTag}>${valorLimpio}</${tipoTag}>`;
+                        });
+                        html += '</tr>';
+                    }
+                });
+                html += '</table>';
 
-  <section class="band">
-    <div class="kicker">Detalle</div>
-    <h2>Matriz de tendencias</h2>
-    <p class="sub">Filtrá por fuente, horizonte, brecha o texto. Cada tendencia muestra sus fuentes y su estado.</p>
-    <div class="filters">
-      <label>Fuente <select id="f-src"><option value="">Todas</option></select></label>
-      <label>Horizonte <select id="f-hor"><option value="">Todos</option></select></label>
-      <label>Brecha <select id="f-gap"><option value="">Todas</option></select></label>
-      <label>Buscar <input id="f-q" type="search" placeholder="Palabra clave"></label>
-    </div>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Tendencia</th><th>Fuentes</th><th>Horizonte</th><th>Brecha</th><th>Lectura</th></tr></thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
-    <div class="empty-msg" id="empty" hidden>No hay tendencias con esos filtros.</div>
-  </section>
+                document.getElementById('tabla-tendencias').innerHTML = html;
+            } catch (error) {
+                console.error("Error al conectar:", error);
+                document.getElementById('tabla-tendencias').innerHTML = "No se pudo cargar la información de la planilla.";
+            }
+        }
 
-  <section class="band">
-    <div class="kicker">¿Qué está pasando hoy?</div>
-    <h2>Números de referencia</h2>
-    <p class="sub">Cada cifra dice quién la mide. Ninguna compara directamente PyMEs con el promedio: se usan como señal, no como promedio.</p>
-    <div class="stat warn"><div class="t">PyMEs argentinas que usan al menos una herramienta de IA<small>nadIA / UTDT, encuesta a 402 empresas</small></div><div><div class="track"><div class="fill" style="width:41.6%"></div></div></div><div class="v">41,6%</div></div>
-    <div class="stat warn"><div class="t">PyMEs argentinas sin evaluación sistemática de resultados<small>nadIA / UTDT</small></div><div><div class="track"><div class="fill" style="width:57%"></div></div></div><div class="v">57%</div></div>
-    <div class="stat neutral"><div class="t">PyMEs argentinas con IA autónoma (agentes)<small>nadIA / UTDT</small></div><div><div class="track"><div class="fill" style="width:4.1%"></div></div></div><div class="v">4,1%</div></div>
-    <div class="stat warn"><div class="t">Líderes de e-commerce que dicen que sus herramientas no alcanzan para personalizar<small>Voyado, Inside e-commerce 2026 (muestra no informada)</small></div><div><div class="track"><div class="fill" style="width:48%"></div></div></div><div class="v">48%</div></div>
-    <div class="stat neutral"><div class="t">E-commerce LATAM que recomiendan productos según el historial de navegación<small>Google Cloud, Retail Garage 2026: 30 e-commerce principales</small></div><div><div class="track"><div class="fill" style="width:33%"></div></div></div><div class="v">1 de 3</div></div>
-    <div class="stat neutral"><div class="t">Empresas enterprise con IA generativa activa en su plataforma<small>G2, preparado para Adobe (15 jun. 2026)</small></div><div><div class="track"><div class="fill" style="width:24.7%"></div></div></div><div class="v">24,7%</div></div>
-    <div class="stat neutral"><div class="t">Consumidores EE. UU. que priorizan la fiabilidad del stock<small>McKinsey, encuesta ICSC a 3.004 consumidores (ene. 2026)</small></div><div><div class="track"><div class="fill" style="width:37%"></div></div></div><div class="v">37%</div></div>
-    <div class="stat neutral"><div class="t">Empresas con estrategia de personalización que usan personalización con IA<small>Ringly, 2026. No es el promedio del mercado: excluye a quienes no tienen estrategia.</small></div><div><div class="track"><div class="fill" style="width:92%"></div></div></div><div class="v">92%</div></div>
-  </section>
-
-  <footer class="foot">
-    <div class="kicker">Fuentes y notas</div>
-    <ul>
-      <li>VTEX, "El futuro del comercio B2B: tendencias, retos y cómo escalar en 2026", blog de VTEX, 6 de julio de 2026.</li>
-      <li>Colleen Baum, Molly Squire, Tyler Rose y Joshua Reuben (McKinsey & Company), "Shopping in the age of AI", 27 de abril de 2026.</li>
-      <li>Sandra Gonzalez Mangana (Adobe Commerce), "Transforming product discovery with AI in Adobe Commerce", 12 de junio de 2026.</li>
-      <li>accessiBe, "Hyper-personalization: From customer preference to inclusive expectation" (4 de agosto de 2026). Es un proveedor de accesibilidad: su mirada es parcial.</li>
-      <li>Voyado, "Inside e-commerce 2026" (encuesta a pares, sin tamaño de muestra informado). Es un proveedor de personalización y CRM: su mirada es parcial.</li>
-      <li>nadIA / UTDT / Fundar; Google Cloud, Retail Garage 2026; G2, reporte preparado para Adobe (2026); Ringly, "45 Ecommerce personalization statistics" (2026).</li>
-      <li>Los horizontes inferidos y las brechas son clasificación propia. Las cifras de Adobe provienen de clientes beta y no son representativas.</li>
-    </ul>
-  </footer>
-</div>
-
-<script>
-// ---- Datos cargados a mano (se usan si el agente no está conectado) ----
-const MANUAL = [
-  {titulo:"IA como motor de personalización", fuente:"VTEX", tendencia:"IA como motor de personalización", horizonte:"Corto", brecha:"Alta", certeza:"Alta", observacion:"Ya es operativa en 2026; la brecha está en la sofisticación de uso.", url:"https://www.vtex.com/es-mx/blog/futuro-comercio-b2b-tendencias-retos-escalar-2026"},
-  {titulo:"Personalización a nivel de comprador", fuente:"VTEX", tendencia:"Personalización a nivel de comprador", horizonte:"Corto", brecha:"Media", certeza:"Alta", observacion:"Capacidad disponible; la brecha está en la implementación.", url:"https://www.vtex.com/es-mx/blog/futuro-comercio-b2b-tendencias-retos-escalar-2026"},
-  {titulo:"Calidad de datos de clientes como requisito", fuente:"VTEX", tendencia:"Calidad de datos de clientes como requisito", horizonte:"Mediano", brecha:"Alta", certeza:"Media", observacion:"Sin datos de calidad no hay recomendaciones ni precios dinámicos precisos.", url:"https://www.vtex.com/es-mx/blog/futuro-comercio-b2b-tendencias-retos-escalar-2026"},
-  {titulo:"Agentes de IA para armar carrito y reponer", fuente:"McKinsey", tendencia:"Agentes de IA para armar carrito y reponer", horizonte:"Mediano", brecha:"Alta", certeza:"Media", observacion:"Una PyME sin integración difícilmente será elegida por un agente comparador.", url:"https://www.mckinsey.com/industries/retail/our-insights/shopping-in-the-age-of-ai-redefining-stores-for-a-new-era"},
-  {titulo:"Recomendaciones y promociones personalizadas", fuente:"McKinsey", tendencia:"Recomendaciones y promociones personalizadas", horizonte:"Corto", brecha:"Media", certeza:"Media", observacion:"Demanda expresada por consumidores en compras de descubrimiento.", url:"https://www.mckinsey.com/industries/retail/our-insights/shopping-in-the-age-of-ai-redefining-stores-for-a-new-era"},
-  {titulo:"Clienteling con IA para el personal de venta", fuente:"McKinsey", tendencia:"Clienteling con IA para el personal de venta", horizonte:"Corto", brecha:"Alta", certeza:"Media", observacion:"Antes reservada para lujo; hoy se escala, pero con costo.", url:"https://www.mckinsey.com/industries/retail/our-insights/shopping-in-the-age-of-ai-redefining-stores-for-a-new-era"},
-  {titulo:"Datos de catálogo, stock y precios en vivo", fuente:"McKinsey", tendencia:"Datos de catálogo, stock y precios en vivo", horizonte:"Corto", brecha:"Media", certeza:"Media", observacion:"Base de credibilidad frente a comparadores y agentes.", url:"https://www.mckinsey.com/industries/retail/our-insights/shopping-in-the-age-of-ai-redefining-stores-for-a-new-era"},
-  {titulo:"Búsqueda semántica con IA", fuente:"Adobe", tendencia:"Búsqueda semántica con IA", horizonte:"Corto", brecha:"Alta", certeza:"Media", observacion:"Disponible desde el 8 de junio de 2026; reduce búsquedas sin resultado.", url:"https://business.adobe.com/blog/transforming-product-discovery-adobe-commerce-ai-powered-search"},
-  {titulo:"Priorización de coincidencias exactas", fuente:"Adobe", tendencia:"Priorización de coincidencias exactas", horizonte:"Corto", brecha:"Media", certeza:"Media", observacion:"Beta privada con elegibilidad; brecha de acceso.", url:"https://business.adobe.com/blog/transforming-product-discovery-adobe-commerce-ai-powered-search"},
-  {titulo:"Configuración inteligente del ranking", fuente:"Adobe", tendencia:"Configuración inteligente del ranking", horizonte:"Corto", brecha:"Media", certeza:"Media", observacion:"Beta pública; requiere análisis para aprovecharla.", url:"https://business.adobe.com/blog/transforming-product-discovery-adobe-commerce-ai-powered-search"},
-  {titulo:"Hoja de ruta de descubrimiento con IA", fuente:"Adobe", tendencia:"Hoja de ruta de descubrimiento con IA", horizonte:"Mediano", brecha:"Sin especificar", certeza:"Baja", observacion:"Sin fechas ni beneficios concretos publicados.", url:"https://business.adobe.com/blog/transforming-product-discovery-adobe-commerce-ai-powered-search"},
-  {titulo:"Hiper-personalización como expectativa base", fuente:"accessiBe", tendencia:"Hiper-personalización como expectativa base", horizonte:"Corto", brecha:"Alta", certeza:"Media", observacion:"El 87% de los líderes de mid-market ya la usa; la PyME tiene que ponerse al día.", url:"https://accessibe.com/blog/knowledgebase/hyper-personalization-impact-for-ecommerce"},
-  {titulo:"Accesibilidad como parte de la personalización", fuente:"accessiBe", tendencia:"Accesibilidad como parte de la personalización", horizonte:"Mediano", brecha:"Sin especificar", certeza:"Baja", observacion:"La fuente la considera parte de la personalización; no evalúa la brecha de PyMEs.", url:"https://accessibe.com/blog/knowledgebase/hyper-personalization-impact-for-ecommerce"},
-  {titulo:"Herramientas de personalización que se adaptan rápido", fuente:"Voyado", tendencia:"Herramientas de personalización que se adaptan rápido", horizonte:"Mediano", brecha:"Alta", certeza:"Media", observacion:"48% dice que sus herramientas no alcanzan; solo 2% confía en adaptarlas rápido.", url:"https://voyado.com/resources/guides/inside-e-commerce/"},
-  {titulo:"Asistentes de compra por voz y catálogos dinámicos en el checkout", fuente:"E-commerce News", tendencia:"Asistentes de compra por voz y catálogos dinámicos en el checkout", horizonte:"Corto", brecha:"Alta", certeza:"Media", observacion:"Tiendas medianas reducen el abandono de carrito con asistentes de voz y catálogos que se adaptan al tono y la urgencia del comprador. Brecha inferida: requiere datos de comportamiento y capacidad técnica.", url:""}
-].map(r => ({...r, tipo:"Analista", origen:"manual"}));
-
-const HOR = ["Corto","Mediano","Largo","inferido"];
-const HOR_LABEL = {Corto:"Corto · 0-1 año", Mediano:"Mediano · 1-3 años", Largo:"Largo · 3+ años", inferido:"Inferido"};
-const HOR_COLOR = {Corto:"var(--h-Corto)", Mediano:"var(--h-Mediano)", Largo:"var(--h-Largo)", inferido:"var(--h-inf)"};
-const GAP = ["Alta","Media","Sin especificar"];
-const GAP_COLOR = {Alta:"var(--g-Alta)", Media:"var(--g-Media)", "Sin especificar":"var(--g-NoEsp)"};
-const SRC_COLOR = {VTEX:"var(--s-VTEX)", McKinsey:"var(--s-McKinsey)", Adobe:"var(--s-Adobe)", accessiBe:"var(--s-accessiBe)", Voyado:"var(--s-Voyado)"};
-
-function esc(t){return String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function moda(vals){const c={};vals.filter(Boolean).forEach(v=>c[v]=(c[v]||0)+1);let best="",n=0;for(const k in c){if(c[k]>n){best=k;n=c[k];}}return best;}
-
-// Agrupa filas por tendencia. Para datos del agente, "confirmada" = 3 o más fuentes que no son señales.
-function agrupar(filas){
-  const m = new Map();
-  filas.forEach(r=>{
-    if(!r.tendencia) return;
-    if(!m.has(r.tendencia)) m.set(r.tendencia,{tendencia:r.tendencia,filas:[]});
-    m.get(r.tendencia).filas.push(r);
-  });
-  return [...m.values()].map(g=>{
-    const f=g.filas;
-    const fuentes=[...new Set(f.map(x=>x.fuente))];
-    const noSenal=f.filter(x=>x.tipo!=="Señal").map(x=>x.url||x.fuente);
-    const origen=f[0].origen;
-    const confirmada=origen==="agente" ? new Set(noSenal).size>=3 : null;
-    return {
-      tendencia:g.tendencia,
-      fuentes,
-      fuentePrincipal:fuentes[0],
-      horizonte:moda(f.map(x=>x.horizonte))||"inferido",
-      brecha:moda(f.map(x=>x.brecha))||"Sin especificar",
-      origen,
-      estado: f.find(x=>x.estado)?.estado || (origen==="agente" ? (confirmada?"Confirmada":"En observación") : ""),
-      lectura:f[0].observacion||"",
-      urls:[...new Set(f.map(x=>x.url).filter(Boolean))]
-    };
-  });
-}
-
-function setText(id,t){document.getElementById(id).textContent=t;}
-
-function render(filas, origenTxt){
-  const T = agrupar(filas);
-  const total=T.length;
-  const corto=T.filter(t=>t.horizonte==="Corto").length;
-  const alta=T.filter(t=>t.brecha==="Alta").length;
-  const largo=T.filter(t=>t.horizonte==="Largo").length;
-  setText("k-total",total);
-  setText("k-total-l","De "+new Set(T.flatMap(t=>t.fuentes)).size+" fuentes");
-  setText("k-corto",corto);
-  setText("k-corto-l", total? Math.round(corto/total*100)+"% del total · 0 a 1 año" : "0 a 1 año");
-  setText("k-alta",alta);
-  setText("k-largo",largo);
-  document.getElementById("origen").innerHTML=origenTxt;
-
-  // Barras por fuente principal
-  const fuentes=[...new Set(T.map(t=>t.fuentePrincipal))];
-  document.getElementById("barras").innerHTML = fuentes.map(fu=>{
-    const sub=T.filter(t=>t.fuentePrincipal===fu);
-    const segs=HOR.map(h=>({h,n:sub.filter(t=>t.horizonte===h).length})).filter(s=>s.n>0);
-    return `<div class="row"><span>${esc(fu)}</span><div class="bar">${segs.map(s=>`<div class="seg ${s.h}" style="flex:${s.n}" title="${esc(HOR_LABEL[s.h])}">${s.n}</div>`).join("")}</div></div>`;
-  }).join("") || '<p class="empty-msg">Sin tendencias para mostrar.</p>';
-
-  // Mapa horizonte x brecha
-  const cols=HOR;
-  let html = '<div></div>' + cols.map(h=>`<div class="hd" role="columnheader">${esc(HOR_LABEL[h])}</div>`).join("");
-  GAP.forEach(g=>{
-    html += `<div class="rl"><span class="tag" style="background:${GAP_COLOR[g]}">${esc(g==="Sin especificar"?"Sin especificar":"Brecha "+g.toLowerCase())}</span></div>`;
-    cols.forEach(h=>{
-      const items=T.filter(t=>t.brecha===g && t.horizonte===h);
-      const cls=items.length?"":" empty";
-      html += `<div class="cell${cls}" style="--c:${GAP_COLOR[g]}"><div class="big">${items.length}</div>${items.length?`<ul>${items.slice(0,6).map(t=>`<li>${esc(t.tendencia)}</li>`).join("")}${items.length>6?`<li>y ${items.length-6} más</li>`:""}</ul>`:""}</div>`;
-    });
-  });
-  document.getElementById("mapa").innerHTML=html;
-
-  // Filtros
-  const selSrc=document.getElementById("f-src");
-  const selHor=document.getElementById("f-hor");
-  const selGap=document.getElementById("f-gap");
-  const allSrc=[...new Set(T.flatMap(t=>t.fuentes))].sort();
-  if(!selSrc.dataset.ready){
-    selSrc.insertAdjacentHTML("beforeend", allSrc.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join(""));
-    selHor.insertAdjacentHTML("beforeend", HOR.map(h=>`<option value="${h}">${esc(HOR_LABEL[h])}</option>`).join(""));
-    selGap.insertAdjacentHTML("beforeend", GAP.map(g=>`<option value="${g}">${g}</option>`).join(""));
-    selSrc.dataset.ready="1";
-  }
-  const q=document.getElementById("f-q").value.trim().toLowerCase();
-  const rows=T.filter(t=>
-    (!selSrc.value || t.fuentes.includes(selSrc.value)) &&
-    (!selHor.value || t.horizonte===selHor.value) &&
-    (!selGap.value || t.brecha===selGap.value) &&
-    (!q || (t.tendencia+" "+t.lectura).toLowerCase().includes(q)));
-  document.getElementById("tbody").innerHTML = rows.map(t=>`
-    <tr>
-      <td class="desc">${esc(t.tendencia)}</td>
-      <td>${t.fuentes.map(f=>`<span class="src" style="color:${SRC_COLOR[f]||"var(--ink)"}">${esc(f)}</span>`).join(", ")}</td>
-      <td><span class="tag" style="background:${HOR_COLOR[t.horizonte]}">${esc(HOR_LABEL[t.horizonte]||t.horizonte)}</span></td>
-      <td><span class="tag" style="background:${GAP_COLOR[t.brecha]||"var(--g-NoEsp)"}">${esc(t.brecha)}</span></td>
-      <td>${esc(t.lectura)}${t.urls.length?`<br>${t.urls.slice(0,2).map((u,i)=>`<a href="${esc(u)}" target="_blank" rel="noopener">fuente ${i+1}</a>`).join(" · ")}`:""}</td>
-    </tr>`).join("");
-  document.getElementById("empty").hidden = rows.length>0;
-}
-
-// Carga: primero el archivo del agente; si no está disponible, datos a mano.
-async function iniciar(){
-  let filas=MANUAL, origenTxt='';
-  try{
-    const r=await fetch("data/noticias.json",{cache:"no-store"});
-    if(r.ok){
-      const j=await r.json();
-      if(j && Array.isArray(j.filas) && j.filas.length){
-        filas=j.filas;
-        origenTxt=`Fuente de datos: <b>agente</b> · actualizado ${esc(j.actualizado||"")}`;
-        setText("fecha","Actualizado: "+(j.actualizado||""));
-      }
-    }
-  }catch(e){ /* sin conexión al archivo: se queda con los datos a mano */ }
-  ["f-src","f-hor","f-gap"].forEach(id=>document.getElementById(id).addEventListener("change",()=>render(filas,origenTxt)));
-  document.getElementById("f-q").addEventListener("input",()=>render(filas,origenTxt));
-  render(filas,origenTxt);
-}
-iniciar();
-</script>
+        cargarGoogleSheet();
+    </script>
 </body>
 </html>
