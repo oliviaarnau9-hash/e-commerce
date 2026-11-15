@@ -312,7 +312,13 @@ async function iniciar() {
             if (!lineas[i].trim()) continue;
             const cols = lineas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ''));
             
-            if (cols.length >= 4) {
+            // Filtro de seguridad para ignorar filas de etiquetas o encabezados que hayan quedado en el Sheet
+            const descLower = (cols[0] || "").toLowerCase();
+            if (descLower.includes("horizonte") || descLower.includes("brecha") || descLower.includes("fuente") || descLower.includes("descripción")) {
+                continue;
+            }
+            
+            if (cols.length >= 4 && cols[0]) {
                 filas.push({
                     tendencia: cols[0] || "",
                     horizonte: cols[1] || "",
